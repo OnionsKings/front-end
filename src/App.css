@@ -14,10 +14,10 @@
 }
 
 .App-header {
-  background-image: url('../public/images/FoShan_University.png');
+  /* background-image: url('/images/FoShan_University.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center center; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -30,3 +30,4 @@
 .App-link {
   color: #61dafb;
 }
+
