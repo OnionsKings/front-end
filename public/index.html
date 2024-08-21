@@ -98,12 +98,17 @@
             const password = document.getElementById('password').value;
             console.log("username is " + username);
             console.log("password is " + password);
-            axios.post('http://localhost:8080/users/login', {
-                name: username,
-                password: password
-            })
+
+            // 创建 URLSearchParams 对象，并添加表单字段
+            let formData = new URLSearchParams();
+            formData.append('name', username);
+            formData.append('password', password);
+
+            // 发送表单数据
+            axios.post('http://localhost:8080/users/login', formData)
             .then(response => {
                 console.log('Login successful:', response.data);
+                sessionStorage.setItem('sessionId', response.data); // 存储 session ID
                 alert('登录成功！');
             })
             .catch(error => {
@@ -111,6 +116,8 @@
                 alert('登录失败');
             });
         });
+
+
 
         document.getElementById('registerBtn').addEventListener('click', function() {
             const username = document.getElementById('regUsername').value;
