@@ -37,7 +37,6 @@ function LoginForm() {
       <div className="password-form form-item">
         <div className="text-tips">
           <span>密码</span>
-          <span className="forgot-password">忘记密码?</span>
         </div>
         <input 
           type="password" 

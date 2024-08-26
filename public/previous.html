@@ -32,7 +32,6 @@
                     <div class="password-`rm form-item">
                         <div class="text-tips">
                             <span>密码</span>
-                            <span class="forgot-password">忘记密码?</span>
                         </div>
                         <input type="password" id="password">
                     </div>
@@ -100,9 +99,9 @@
             console.log("password is " + password);
 
             // 创建 URLSearchParams 对象，并添加表单字段
-            let formData = new URLSearchParams();
+            <!-- let formData = new URLSearchParams();
             formData.append('name', username);
-            formData.append('password', password);
+            formData.append('password', password); -->
 
             // 发送表单数据
             axios.post('http://localhost:8080/users/login', formData)

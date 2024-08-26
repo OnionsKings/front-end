@@ -7,28 +7,30 @@ function App() {
   const [isLogin, setIsLogin] = useState(true);
 
   const toggleForm = () => {
-    setIsLogin(!isLogin);
+    setIsLogin(!isLogin);  
   };
-
+ 
   return (
     <div className="App">
       <div className="box">
         <div className="content">
           <div className="logo-and-form">
           {/* for src, can just start with /, no need ../public/ */}
-          <img className="logo-img" src="/images/foshandaxue.png" alt="Foshan University Logo" />
-            <div className="login-wrapper">
-              <div className="top-tips">
+          <img className="logo-img" src="/images/foshandaxue.png"/>
+           <div className="content" style={{ height: isLogin ? '70vh' : '76vh' }}>
+            <div className="login-wrapper" style={{ height: isLogin ? '60vh' : '65vh' }}>
+               <div className="top-tips">
                 <span>图书借阅管理系统</span>
                 <span className="top-tips-span" onClick={toggleForm}>{isLogin ? '注册' : '登录'}</span>
-              </div>
+               </div>
               <h1 className="h1-text">{isLogin ? '登录' : '注册'}</h1>
               {isLogin ? <LoginForm /> : <RegisterForm />}
+             </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+       </div>
+     </div>
   );
 }
 
