@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import Dashboard from './components/Dashboard';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,11 +14,11 @@ function App() {
  
   return (
     <div className="App">
-      <div className="box">
+      <Routes>
+        <Route path="/" element={<div className="box">
         <div className="content">
           <div className="logo-and-form">
-          {/* for src, can just start with /, no need ../public/ */}
-          <img className="logo-img" src="/images/foshandaxue.png"/>
+          {/* <img className="logo-img" src="/images/foshandaxue.png"/> */}
            <div className="content" style={{ height: isLogin ? '70vh' : '76vh' }}>
             <div className="login-wrapper" style={{ height: isLogin ? '60vh' : '65vh' }}>
                <div className="top-tips">
@@ -24,13 +26,22 @@ function App() {
                 <span className="top-tips-span" onClick={toggleForm}>{isLogin ? '注册' : '登录'}</span>
                </div>
               <h1 className="h1-text">{isLogin ? '登录' : '注册'}</h1>
-              {isLogin ? <LoginForm /> : <RegisterForm />}
+              <div style={{ display: isLogin ? 'block' : 'none' }}>
+                <LoginForm />
+              </div>
+              <div style={{ display: isLogin ? 'none' : 'block' }}>
+                <RegisterForm />
+              </div>
              </div>
             </div>
           </div>
         </div>
-       </div>
-     </div>
+       </div>} />
+
+      <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+      
+    </div>
   );
 }
 

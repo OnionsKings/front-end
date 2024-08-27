@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     let formData = new URLSearchParams();
@@ -15,6 +17,7 @@ function LoginForm() {
         console.log('Login successful:', response.data);
         sessionStorage.setItem('sessionId', response.data);
         alert('登录成功！');
+        navigate('/dashboard');
       })
       .catch(error => {
         console.error('Login error:', error);

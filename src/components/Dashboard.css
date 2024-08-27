@@ -1,0 +1,30 @@
+/* Dashboard.css */
+.dashboard-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row; /* 确保sidebar和main-content正确排列 */
+    justify-content: flex-start; /* 确保sidebar靠左显示 */
+    background-color: white;
+}
+
+
+.sidebar {
+    width: 200px;
+    background-color: #333;
+    color: white;
+    height: 100vh; /* Full height */
+}
+
+.sidebar .menu-item {
+    padding: 10px;
+    border-bottom: 1px solid grey;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+
+  
