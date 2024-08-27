@@ -5,26 +5,50 @@
     display: flex;
     flex-direction: row; /* 确保sidebar和main-content正确排列 */
     justify-content: flex-start; /* 确保sidebar靠左显示 */
-    background-color: white;
+    background-color: #f4f4f4;
 }
 
-
 .sidebar {
-    width: 200px;
-    background-color: #333;
+    width: 240px;
+    background-color: #2c3e50;
     color: white;
     height: 100vh; /* Full height */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 .sidebar .menu-item {
-    padding: 10px;
-    border-bottom: 1px solid grey;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar .menu-item:hover {
+    background-color: #34495e;
+}
+
+.sidebar .menu-item.active {
+    background-color: #3498db;
+    font-weight: bold;
 }
 
 .main-content {
     flex-grow: 1;
-    padding: 20px;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin: 20px;
+    border-radius: 8px;
 }
 
+/* 添加一些图标样式 */
+.menu-item::before {
+    content: '▶';
+    margin-right: 10px;
+    font-size: 12px;
+}
 
-  
+.menu-item.active::before {
+    content: '▼';
+}
+

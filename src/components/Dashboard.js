@@ -1,27 +1,43 @@
 // Dashboard.js
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import './Dashboard.css'; // 确保你有一个CSS文件来样式化这个组件
 
 function Dashboard() {
-    useEffect(() => {
-        console.log('useEffect running');
-        document.querySelectorAll('#root > *:not(.dashboard-container)').forEach(el => {
-          el.style.display = 'none';
-        });
-        // document.querySelector('.some-other-class').style.display = 'none';
-      }, []);      
+  const [selectedMenu, setSelectedMenu] = useState('欢迎');
+
+  const renderContent = () => {
+    switch (selectedMenu) {
+      case '图书管理':
+        return <p>这里是图书管理的内容</p>;
+      case '借书管理':
+        return <p>这里是借书管理的内容</p>;
+      case '图书馆通知':
+        return <p>这里是图书馆通知的内容</p>;
+      case '系统管理':
+        return <p>这里是系统管理的内容</p>;
+      case '统计分析':
+        return <p>这里是统计分析的内容</p>;
+      default:
+        return <p>欢迎来到图书管理系统</p>;
+    }
+  };
+
   return (
     <div className="dashboard-container">
       <div className="sidebar">
-        <div className="menu-item">图书管理</div>
-        <div className="menu-item">借书管理</div>
-        <div className="menu-item">图书馆通知</div>
-        <div className="menu-item">系统管理</div>
-        <div className="menu-item">统计分析</div>
+        {['图书管理', '借书管理', '图书馆通知', '系统管理', '统计分析'].map((item) => (
+          <div
+            key={item}
+            className={`menu-item ${selectedMenu === item ? 'active' : ''}`}
+            onClick={() => setSelectedMenu(item)}
+          >
+            {item}
+          </div>
+        ))}
       </div>
       <div className="main-content">
-        <h1>欢迎来到图书管理系统</h1>
-        <p>这里是一些动态内容...</p>
+        <h1>{selectedMenu}</h1>
+        {renderContent()}
       </div>
     </div>
   );
