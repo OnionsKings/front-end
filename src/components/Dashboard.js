@@ -1,14 +1,17 @@
 // Dashboard.js
 import React, { useState } from 'react';
-import './Dashboard.css'; // 确保你有一个CSS文件来样式化这个组件
+import './Dashboard.css';
+import BookManagement from './BookManagement';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const [selectedMenu, setSelectedMenu] = useState('欢迎');
+  const navigate = useNavigate();
 
   const renderContent = () => {
     switch (selectedMenu) {
       case '图书管理':
-        return <p>这里是图书管理的内容</p>;
+        return <BookManagement />;
       case '借书管理':
         return <p>这里是借书管理的内容</p>;
       case '图书馆通知':
@@ -20,6 +23,11 @@ function Dashboard() {
       default:
         return <p>欢迎来到图书管理系统</p>;
     }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('sessionId');
+    navigate('/');
   };
 
   return (
@@ -34,6 +42,9 @@ function Dashboard() {
             {item}
           </div>
         ))}
+        <div className="menu-item" onClick={handleLogout}>
+          登出
+        </div>
       </div>
       <div className="main-content">
         <h1>{selectedMenu}</h1>
