@@ -1,25 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import './BookManagement.css';
+import EditBookForm from './EditBookForm';
 
 function BookManagement() {
+  // 后端测试URL
+  const BASE_URL = 'http://localhost:8080';
   const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({ title: '', author: '', isbn: '' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [editingBook, setEditingBook] = useState(null);
 
   useEffect(() => {
-    // 这里应该从后端 API 获取图书列表
-    // 暂时使用模拟数据
-    setBooks([
-      { id: 1, title: '三体', author: '刘慈欣', isbn: '9787536692930' },
-      { id: 2, title: '百年孤独', author: '加西亚·马尔克斯', isbn: '9787544253994' },
-      { id: 3, title: '1984', author: '乔治·奥威尔', isbn: '9787532751631' },
-    ]);
+    fetchBooks();
   }, []);
 
-  const handleAddBook = () => {
-    // 这里应该调用后端 API 来添加新书
-    setBooks([...books, { ...newBook, id: books.length + 1 }]);
-    setNewBook({ title: '', author: '', isbn: '' });
+  const fetchBooks = async () => {
+    try {
+      const response = await fetch(BASE_URL + '/books');
+      console.log('response is ' + response);
+      const data = await response.json();
+      setBooks(data);
+    } catch (error) {
+      console.error('获取图书列表失败:', error);
+    }
+  };
+
+  const handleAddBook = async () => {
+    try {
+      const response = await fetch(BASE_URL + '/books/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newBook)
+      });
+      if (response.ok) {
+        console.log('添加图书成功');
+        fetchBooks();
+        setNewBook({ title: '', author: '', isbn: '' });
+      } else {
+        console.error('添加图书失败:', response.statusText);
+      }
+    } catch (error) {
+      console.error('添加图书失败:', error);
+    }
+  };
+
+  const handleDeleteBook = async (isbn) => {
+    try {
+      const response = await fetch(BASE_URL + `/books/${isbn}`, { method: 'DELETE' });
+      if (response.ok) {
+        fetchBooks();
+      }
+    } catch (error) {
+      console.error('删除图书失败:', error);
+    }
+  };
+
+  const handleEditBook = (book) => {
+    setEditingBook(book);
+  };
+
+  const handleUpdateBook = async (updatedBook) => {
+    try {
+      const response = await fetch(BASE_URL + `/books/${updatedBook.isbn}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedBook)
+      });
+      if (response.ok) {
+        fetchBooks();
+        setEditingBook(null);
+      }
+    } catch (error) {
+      console.error('更新图书失败:', error);
+    }
   };
 
   const filteredBooks = books.filter(book =>
@@ -63,29 +116,37 @@ function BookManagement() {
         />
       </div>
 
-      <table className="book-table">
-        <thead>
-          <tr>
-            <th>书名</th>
-            <th>作者</th>
-            <th>ISBN</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredBooks.map(book => (
-            <tr key={book.id}>
-              <td>{book.title}</td>
-              <td>{book.author}</td>
-              <td>{book.isbn}</td>
-              <td>
-                <button className="edit-btn">编辑</button>
-                <button className="delete-btn">删除</button>
-              </td>
+      {editingBook ? (
+        <EditBookForm 
+          book={editingBook} 
+          onUpdate={handleUpdateBook} 
+          onCancel={() => setEditingBook(null)}
+        />
+      ) : (
+        <table className="book-table">
+          <thead>
+            <tr>
+              <th>书名</th>
+              <th>作者</th>
+              <th>ISBN</th>
+              <th>操作</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredBooks.map(book => (
+              <tr key={book.isbn}>
+                <td>{book.title}</td>
+                <td>{book.author}</td>
+                <td>{book.isbn}</td>
+                <td>
+                  <button className="edit-btn" onClick={() => handleEditBook(book)}>编辑</button>
+                  <button className="delete-btn" onClick={() => handleDeleteBook(book.isbn)}>删除</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
