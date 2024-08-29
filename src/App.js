@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
-import Dashboard from './components/Dashboard';
+import NormalUserDashboard from './components/NormalUserDashboard';
+import BookAdminDashboard from './components/BookAdminDashboard';
+import SystemAdminDashboard from './components/SystemAdminDashboard';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 
@@ -38,7 +40,9 @@ function App() {
         </div>
        </div>} />
 
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/normal-user-dashboard" element={<NormalUserDashboard />} />
+      <Route path="/book-admin-dashboard" element={<BookAdminDashboard />} />
+      <Route path="/system-admin-dashboard" element={<SystemAdminDashboard />} />
       </Routes>
       
     </div>

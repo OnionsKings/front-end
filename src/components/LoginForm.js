@@ -14,33 +14,50 @@ function LoginForm() {
 
     axios.post('http://localhost:8080/users/login', formData)
       .then(response => {
-        console.log('Login successful:', response.data);
-        sessionStorage.setItem('sessionId', response.data);
-        alert('登录成功！');
-        navigate('/dashboard');
+        console.log('登录成功:', response.data);
+        if (response.data.token && response.data.userType) {
+          sessionStorage.setItem('token', response.data.token);
+          sessionStorage.setItem('userType', response.data.userType);
+          alert('登录成功！');
+          navigateToDashboard(response.data.userType);
+        } else {
+          alert('登录响应格式不正确');
+        }
       })
       .catch(error => {
-        console.error('Login error:', error);
-        alert('登录失败');
+        console.error('登录错误:', error);
+        alert('登录失败：' + (error.response?.data || error.message));
       });
+  };
+
+  const navigateToDashboard = (userType) => {
+    switch(userType) {
+      case 'normal':
+        navigate('/normal-user-dashboard');
+        break;
+      case 'bookAdmin':
+        navigate('/book-admin-dashboard');
+        break;
+      case 'systemAdmin':
+        navigate('/system-admin-dashboard');
+        break;
+      default:
+        navigate('/dashboard');
+    }
   };
 
   return (
     <div className="login-form">
-      <div className="user-form form-item">
-        <div className="text-tips">
-          <span>账号</span>
-        </div>
+      <div className="form-item">
+        <label>用户名：</label>
         <input 
           type="text" 
           value={username}
           onChange={(e) => setUsername(e.target.value)} 
         />
       </div>
-      <div className="password-form form-item">
-        <div className="text-tips">
-          <span>密码</span>
-        </div>
+      <div className="form-item">
+        <label>密码：</label>
         <input 
           type="password" 
           value={password}
