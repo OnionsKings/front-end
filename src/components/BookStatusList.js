@@ -46,6 +46,9 @@ function BookStatusList() {
               <th>ISBN</th>
               <th>状态</th>
               <th>借阅者</th>
+              <th>借阅日期</th>
+              <th>借阅天数</th>
+              <th>剩余天数</th>
             </tr>
           </thead>
           <tbody>
@@ -56,6 +59,9 @@ function BookStatusList() {
                 <td>{book.isbn}</td>
                 <td>{book.borrowed ? '已借出' : '可借阅'}</td>
                 <td>{book.borrowerName || '-'}</td>
+                <td>{book.borrowDate || '-'}</td>
+                <td>{book.borrowDays || '-'}</td>
+                <td>{book.daysLeft !== undefined ? `${book.daysLeft}天` : '-'}</td>
               </tr>
             ))}
           </tbody>

@@ -1,84 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './BookBorrowManagement.css';
 
 function BookBorrowManagement() {
-  const [books, setBooks] = useState([]);
+  const [availableBooks, setAvailableBooks] = useState([]);
   const [borrowedBooks, setBorrowedBooks] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const BASE_URL = 'http://localhost:8080';
+  const [borrowDays, setBorrowDays] = useState(7);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchBooks();
+    fetchAvailableBooks();
     fetchBorrowedBooks();
   }, []);
 
-  const fetchBooks = async () => {
+  const fetchAvailableBooks = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/books/available`);
-      setBooks(response.data);
+      const token = sessionStorage.getItem('token');
+      const response = await axios.get('http://localhost:8080/books/available', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAvailableBooks(response.data);
     } catch (error) {
-      console.error('获取图书列表失败:', error);
+      setError('获取可借阅图书失败');
     }
   };
 
   const fetchBorrowedBooks = async () => {
     try {
       const token = sessionStorage.getItem('token');
-      const response = await axios.get(`${BASE_URL}/books/borrowed`, {
+      const response = await axios.get('http://localhost:8080/books/all-with-status', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBorrowedBooks(response.data);
+      setBorrowedBooks(response.data.filter(book => book.borrowed));
     } catch (error) {
-      console.error('获取已借阅图书列表失败:', error);
+      setError('获取已借阅图书失败');
     }
   };
 
-  const handleBorrow = async (isbn) => {
+  const handleBorrow = async (book) => {
     try {
       const token = sessionStorage.getItem('token');
-      await axios.post(`${BASE_URL}/books/borrow/${isbn}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchBooks();
+      await axios.post(`http://localhost:8080/books/borrow/${book.isbn}`, 
+        { days: borrowDays },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchAvailableBooks();
       fetchBorrowedBooks();
     } catch (error) {
-      console.error('借阅图书失败:', error);
+      setError('借阅图书失败');
     }
   };
 
-  const handleReturn = async (isbn) => {
+  const handleReturn = async (book) => {
     try {
       const token = sessionStorage.getItem('token');
-      await axios.post(`${BASE_URL}/books/return/${isbn}`, {}, {
+      await axios.post(`http://localhost:8080/books/return/${book.isbn}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      fetchBooks();
+      fetchAvailableBooks();
       fetchBorrowedBooks();
     } catch (error) {
-      console.error('归还图书失败:', error);
+      setError('归还图书失败');
     }
   };
 
-  const filteredBooks = books.filter(book =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.isbn.includes(searchTerm)
-  );
+  if (error) {
+    return <div>错误: {error}</div>;
+  }
 
   return (
     <div className="book-borrow-management">
-      <h2>图书借阅管理</h2>
-      
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="搜索图书..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      <h3>可借阅图书</h3>
+      <h2>可借阅图书</h2>
       <table className="book-table">
         <thead>
           <tr>
@@ -89,26 +81,36 @@ function BookBorrowManagement() {
           </tr>
         </thead>
         <tbody>
-          {filteredBooks.map(book => (
+          {availableBooks.map(book => (
             <tr key={book.isbn}>
               <td>{book.title}</td>
               <td>{book.author}</td>
               <td>{book.isbn}</td>
               <td>
-                <button onClick={() => handleBorrow(book.isbn)}>借阅</button>
+                <input
+                  type="number"
+                  className="borrow-input"
+                  value={borrowDays}
+                  onChange={(e) => setBorrowDays(Math.max(1, parseInt(e.target.value) || 1))}
+                  min="1"
+                />
+                <button className="borrow-button" onClick={() => handleBorrow(book)}>借阅</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <h3>已借阅图书</h3>
+      <h2>已借阅图书</h2>
       <table className="book-table">
         <thead>
           <tr>
             <th>书名</th>
             <th>作者</th>
             <th>ISBN</th>
+            <th>借阅日期</th>
+            <th>借阅天数</th>
+            <th>剩余天数</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -118,8 +120,11 @@ function BookBorrowManagement() {
               <td>{book.title}</td>
               <td>{book.author}</td>
               <td>{book.isbn}</td>
+              <td>{book.borrowDate}</td>
+              <td>{book.borrowDays}</td>
+              <td>{book.daysLeft !== undefined ? `${book.daysLeft}天` : '-'}</td>
               <td>
-                <button onClick={() => handleReturn(book.isbn)}>归还</button>
+                <button className="return-button" onClick={() => handleReturn(book)}>归还</button>
               </td>
             </tr>
           ))}
