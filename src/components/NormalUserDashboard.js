@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 import { useNavigate } from 'react-router-dom';
+import BookBorrowManagement from './BookBorrowManagement';
 
 function NormalUserDashboard() {
   const [selectedMenu, setSelectedMenu] = useState('欢迎');
@@ -9,7 +10,7 @@ function NormalUserDashboard() {
   const renderContent = () => {
     switch (selectedMenu) {
       case '借书管理':
-        return <p>这里是借书管理的内容</p>;
+        return <BookBorrowManagement />;
       default:
         return <p>欢迎来到图书管理系统</p>;
     }

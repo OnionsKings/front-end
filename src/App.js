@@ -4,6 +4,7 @@ import RegisterForm from './components/RegisterForm';
 import NormalUserDashboard from './components/NormalUserDashboard';
 import BookAdminDashboard from './components/BookAdminDashboard';
 import SystemAdminDashboard from './components/SystemAdminDashboard';
+import BookStatusList from './components/BookStatusList';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 
@@ -43,6 +44,7 @@ function App() {
       <Route path="/normal-user-dashboard" element={<NormalUserDashboard />} />
       <Route path="/book-admin-dashboard" element={<BookAdminDashboard />} />
       <Route path="/system-admin-dashboard" element={<SystemAdminDashboard />} />
+      <Route path="/book-status" element={<BookStatusList />} />
       </Routes>
       
     </div>
