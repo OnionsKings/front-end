@@ -5,6 +5,7 @@ import BookManagement from './BookManagement';
 import BookStatusList from './BookStatusList';
 import UserManagement from './UserManagement';
 import { useNavigate } from 'react-router-dom';
+import StatisticsAnalysis from './StatisticsAnalysis';
 
 function SystemAdminDashboard() {
   const [selectedMenu, setSelectedMenu] = useState('欢迎');
@@ -17,11 +18,11 @@ function SystemAdminDashboard() {
       case '借书管理':
         return <BookStatusList />;
       case '图书馆通知':
-        return <p>这里是图书馆通知的内容</p>;
+        return <p>这里是图书馆通知的内容（未完成）</p>;
       case '系统管理':
         return <UserManagement />;
       case '统计分析':
-        return <p>这里是统计分析的内容</p>;
+        return <StatisticsAnalysis />;
       default:
         return <p>欢迎来到图书管理系统</p>;
     }

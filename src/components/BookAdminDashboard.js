@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Dashboard.css';
 import BookManagement from './BookManagement';
 import BookStatusList from './BookStatusList';
+import StatisticsAnalysis from './StatisticsAnalysis';
 import { useNavigate } from 'react-router-dom';
 
 function BookAdminDashboard() {
@@ -14,6 +15,8 @@ function BookAdminDashboard() {
         return <BookManagement />;
       case '借书管理':
         return <BookStatusList />;
+      case '统计分析':
+        return <StatisticsAnalysis />;
       default:
         return <p>欢迎来到图书管理系统</p>;
     }
@@ -28,7 +31,7 @@ function BookAdminDashboard() {
   return (
     <div className="dashboard-container">
       <div className="sidebar">
-        {['图书管理', '借书管理'].map((item) => (
+        {['图书管理', '借书管理', '统计分析'].map((item) => (
           <div
             key={item}
             className={`menu-item ${selectedMenu === item ? 'active' : ''}`}
