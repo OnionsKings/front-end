@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 import BookManagement from './BookManagement';
+import BookStatusList from './BookStatusList';
+import UserManagement from './UserManagement';
 import { useNavigate } from 'react-router-dom';
 
-function Dashboard() {
+function SystemAdminDashboard() {
   const [selectedMenu, setSelectedMenu] = useState('欢迎');
   const navigate = useNavigate();
 
@@ -13,11 +15,11 @@ function Dashboard() {
       case '图书管理':
         return <BookManagement />;
       case '借书管理':
-        return <p>这里是借书管理的内容</p>;
+        return <BookStatusList />;
       case '图书馆通知':
         return <p>这里是图书馆通知的内容</p>;
       case '系统管理':
-        return <p>这里是系统管理的内容</p>;
+        return <UserManagement />;
       case '统计分析':
         return <p>这里是统计分析的内容</p>;
       default:
@@ -26,7 +28,8 @@ function Dashboard() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('sessionId');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('userType');
     navigate('/');
   };
 
@@ -42,7 +45,7 @@ function Dashboard() {
             {item}
           </div>
         ))}
-        <div className="menu-item" onClick={handleLogout}>
+        <div className="menu-item logout-button" onClick={handleLogout}>
           登出
         </div>
       </div>
@@ -54,4 +57,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default SystemAdminDashboard;
