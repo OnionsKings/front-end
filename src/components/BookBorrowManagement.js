@@ -94,6 +94,7 @@ function BookBorrowManagement() {
                   className="borrow-input"
                   value={borrowDays}
                   onChange={(e) => setBorrowDays(Math.max(1, parseInt(e.target.value) || 1))}
+                  placeholder='请输入借阅天数'
                   min="1"
                 />
                 <button className="borrow-button" onClick={() => handleBorrow(book)}>借阅</button>

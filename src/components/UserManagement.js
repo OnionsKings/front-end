@@ -72,6 +72,7 @@ function UserManagement() {
   return (
     <div className="user-management">
       <h2>用户管理</h2>
+      <h3>创建新用户</h3>
       <form onSubmit={handleAddUser}>
         <input
           type="text"
@@ -95,6 +96,7 @@ function UserManagement() {
         </select>
         <button type="submit">添加用户</button>
       </form>
+     <h3 align="center">用户列表</h3>
       {users.length === 0 ? (
         <p>加载中...</p>
       ) : (
