@@ -54,13 +54,15 @@ function BookBorrowManagement() {
   const handleReturn = async (book) => {
     try {
       const token = sessionStorage.getItem('token');
-      await axios.post(`http://localhost:8080/books/return/${book.isbn}`, {}, {
+      const response = await axios.post(`http://localhost:8080/books/return/${book.isbn}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log('归还成功:', response.data);
       fetchAvailableBooks();
       fetchBorrowedBooks();
     } catch (error) {
-      setError('归还图书失败');
+      console.error('归还图书失败:', error.response ? error.response.data : error.message);
+      setError(`归还图书失败: ${error.response ? error.response.data : error.message}`);
     }
   };
 
