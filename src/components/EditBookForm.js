@@ -33,7 +33,8 @@ function EditBookForm({ book, onUpdate, onCancel }) {
         value={editedBook.isbn}
         onChange={handleChange}
         placeholder="ISBN"
-        readOnly
+        // if ISBN can't be changed, uncomment the following line
+        // readOnly
       />
       <button type="submit">保存</button>
       <button type="button" onClick={onCancel}>取消</button>
