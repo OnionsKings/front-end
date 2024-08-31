@@ -7,6 +7,7 @@ function BookBorrowManagement() {
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [borrowDays, setBorrowDays] = useState(7);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchAvailableBooks();
@@ -66,12 +67,33 @@ function BookBorrowManagement() {
     }
   };
 
+  const filteredAvailableBooks = availableBooks.filter(book =>
+    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.isbn.includes(searchTerm)
+  );
+
+  const filteredBorrowedBooks = borrowedBooks.filter(book =>
+    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.isbn.includes(searchTerm)
+  );
+
   if (error) {
     return <div>错误: {error}</div>;
   }
 
   return (
     <div className="book-borrow-management">
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="搜索图书..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
       <h2>可借阅图书</h2>
       <table className="book-table">
         <thead>
@@ -83,7 +105,7 @@ function BookBorrowManagement() {
           </tr>
         </thead>
         <tbody>
-          {availableBooks.map(book => (
+          {filteredAvailableBooks.map(book => (
             <tr key={book.isbn}>
               <td>{book.title}</td>
               <td>{book.author}</td>
@@ -118,7 +140,7 @@ function BookBorrowManagement() {
           </tr>
         </thead>
         <tbody>
-          {borrowedBooks.map(book => (
+          {filteredBorrowedBooks.map(book => (
             <tr key={book.isbn}>
               <td>{book.title}</td>
               <td>{book.author}</td>
